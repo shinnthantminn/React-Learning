@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { BiTrash, BiEdit } from "react-icons/bi";
+import ListContainer from "./Components/ListContainer";
 
 const App = () => {
   const [text, setText] = useState("");
@@ -28,8 +28,8 @@ const App = () => {
     setList((preState) => preState.filter((i) => i.id !== e));
   };
 
-  const handleEdit = (id) => {
-    const value = prompt("are you sure you want to edit");
+  const handleEdit = (id, text) => {
+    const value = prompt("are you sure you want to edit", text);
     if (value !== "") {
       setList((pre) =>
         pre.map((i) => (i.id === id ? { id: uuidv4(), text: value } : i))
@@ -51,21 +51,12 @@ const App = () => {
       </div>
       <div>
         {list.map((i) => (
-          <div key={i.id} className="listContainer">
-            <p> {i.text}</p>
-            <div>
-              <BiTrash
-                onClick={() => {
-                  handleDelete(i.id);
-                }}
-              />
-              <BiEdit
-                onClick={() => {
-                  handleEdit(i.id);
-                }}
-              />
-            </div>
-          </div>
+          <ListContainer
+            key={i.id}
+            data={i}
+            drop={handleDelete}
+            edit={handleEdit}
+          />
         ))}
       </div>
     </div>
